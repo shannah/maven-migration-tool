@@ -162,12 +162,20 @@
                       <version>3.0.0</version>
                       <executions>
                           <execution>
-                              <phase>prepare-package</phase>
+                              <id>generate-javase-zip</id>
+                              <phase>package</phase>
                               <configuration>
                                   <target>
+                                      <mkdir dir="${project.build.directory}/${project.build.finalName}"/>
+                                      <mkdir dir="${project.build.directory}/${project.build.finalName}/libs"/>
+                                      <copy todir="${project.build.directory}/${project.build.finalName}/libs">
+                                        <fileset dir="${project.build.directory}/libs"/>
+                                      </copy>
+                                      <copy todir="${project.build.directory}/${project.build.finalName}" file="${project.build.directory}/${project.build.finalName}.jar"/>
+
                                       <zip destfile="${project.build.directory}/${project.build.finalName}.zip"
-                                           basedir="${project.build.directory}"
-                                           includes="${project.build.finalName}.jar, libs/*">
+                                           basedir="${project.build.directory}/${project.build.finalName}"
+                                           includes="**">
 
                                       </zip>
 
