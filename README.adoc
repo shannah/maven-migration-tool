@@ -12,9 +12,7 @@ MIT
 
 == Downloads
 
-. Mac (DMG)
-. Windows Installer (exe)
-. ZIP (cross-platform JavaSE bundle)
+See the https://github.com/shannah/maven-migration-tool/releases[releases page].
 
 == Usage
 
