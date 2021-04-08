@@ -49,6 +49,13 @@ function jar {
   
   "$MVNW" "-Pexecutable-jar" "package" "-Dcodename1.platform=javase" "-DskipTests" "-U" "-e"
 }
+
+function all_bundles {
+    "jar"
+    "mac_desktop"
+    "windows_desktop"
+}
+
 function help {
   "echo" "-e" "build.sh [COMMAND]"
   "echo" "-e" "Local Build Commands:"

@@ -1,111 +1,75 @@
-= Codename One Project
+= Codename One Maven Migration Tool
 
-This project is a multi-module Maven project that was generated from a Maven archetype.
+This is a desktop GUI application that simplifies the migration of legacy Codename One projects that used the Ant build tool to the https://www.codenameone.com/blog/moving-to-maven.html[new Maven project format].
 
-== Run Instructions
+Essentially this just wraps the _https://shannah.github.io/codenameone-maven-manual/#generate-app-project[generate-app-project]_ and _https://shannah.github.io/codenameone-maven-manual/#_generate_cn1lib_project_generate_cn1lib_project[generate-cn1lib-project]_ goals of the Codename One maven plugin to make them easier to use.
 
-This project can be run from the command line using maven directly, or using the `run.[sh|bat]` wrapper script.
+TIP: This tool is for migrating _existing_ projects to Maven.  To start a new project from scratch, you can use the https://start.codenameone.com[Codename One initializr] online tool.
 
-=== Using the `run.[sh|bat]` wrapper script
+== License
 
-Run in simulator::
-+
-[source,bash]
-----
-./run.sh
-----
+MIT
 
-Run Desktop App::
-+
-[source,bash]
-----
-./run.sh desktop
-----
+== Downloads
 
-== Build Instructions
+. Mac (DMG)
+. Windows Installer (exe)
+. ZIP (cross-platform JavaSE bundle)
 
-This project can be built from the command line using maven directly, or using the `build.[sh|bat]` wrapper script.
+== Usage
 
-=== Using the `build.[sh|bat]` wrapper script
+Open the Maven Migration Tool App.  It will open  window that looks like:
 
-==== Local Build Targets
+image::images/migration-tool-main.png[]
 
-The following build targets will be run on your local machine.
+You can explicitly specify the plugin version you wish to use for generating the maven project.  If you leave this field blank or enter "LATEST", it will automatically use the latest release version in Maven Central.  Usually you will want to use the latest version.  If you are working with a SNAPSHOT version of Codename One, then you may enter that snapshot version in the field.
 
-jar::
-Builds a portable executable Jar that runs on any platform supporting JavaSE (e.g. Mac, Windows, Linux, etc..).  **Default target**
-+
-====
-*Example*
+Next you should select the source project (i.e. the Codename One project that you wish to convert to Maven) by pressing the _Browse..._ button to the right of the "Source Project Path" field.
 
-.Building an executable jar
-[source,bash]
-----
-./build.sh jar
-----
+image::images/select-source-project.png[]
 
-Since "jar" is the default target, the above is equivalent to running:
+TIP: The source project can be either a Codename One Application project, or a Codename One Library project.  The Migration tool will automatically perform the correct conversion according to the project type.
 
-[source,bash]
-----
-./build.sh
-----
-====
+Next you should select the _destination directory_ for the Maven project by pressing the _Browse..._ button to the right of the _Destination Directory_ text field.
 
-ios_source::
-Generates an Xcode project for an iOS app that can be opened and built in Xcode.  *Requires that you have a Mac with Xcode installed*.  Project will be created in the `ios/generated-sources` directory.
-+
-====
-**Example**
+image::images/select-destination-directory.png[]
 
-.Generating an Xcode project
-[source,bash]
-----
-./build.sh ios_source
-----
-====
+NOTE: The destination directory must exist.  The maven project will be created inside this directory named after the _artifactId_ you choose for the project.  E.g. If you select _/home/Downloads_ as the destination directory, and the _artifactId_ is "myapp", then your project will be created at _/home/Downloads/myapp_.
 
-android_source::
-Generates an adroid gradle project for an Android app that can be opened and built in Android Studio.  *Requires that you have Android developer tools and gradle installed.  `ANDROID_HOME` environment variable should point to android sdk.  Either `GRADLE_HOME` environment variable should point to gradle home, or gradle should be in your PATH.  Project will be created in the `android/generated-sources` directory.
-+
-====
-**Example**
 
-.Generating a gradle android project
-[source,bash]
-----
-ANDROID_HOME=/path/to/android-sdk ./build.sh android_source
-----
-====
+If this is a library project, you will see two additional fields to fill in, _Group ID_ and _Artifact ID_.  These are the values that will be used for the maven project.
 
-==== Build Server Targets
+NOTE: Application projects will use the _packageName_ and _mainName_ values from the _codenameone_settings.properties_ file of the project as the _groupId_ and _artifactId_ fields respectively.  Therefore this section of the form will not be visible if you select an Application project.
 
-The following targets will intiate a build on the Codename One build server.
+Once you have filled in the fields, press the _Create Project_ button.
 
-ios::
-Build for iOS using the Codename One build server.
+image::images/create-project-button.png[]
 
-ios-release::
-Build an iOS app for submission to Apple app store.
+The maven output will be logged in the console at the bottom of the window.
 
-android::
-Build apk/aab for Android using the Codename One build server.
+image::images/console-output.png[]
 
-mac_desktop::
-Build a Mac desktop app.
-+
-*Mac desktop builds Require a Pro account*
+If the migration completes successfully, you should see dialog stating that the conversion was a success.
 
-windows_desktop::
-Build a Windows desktop app.
-+
-*Windows desktop builds require a Pro account*
+Upon disposing this dialog, it will open the project directory in the file system explorer.
 
-windows_device::
-Build a Windows (UWP) app.
+image::images/converted-project.png[]
 
-javascript::
-Build a web app (compiled to javascript using TeaVM).
-+
-*Javascript builds require an Enterprise Account*
+This new project does not depend on the original project at all, so you can archive the old project away, and start working with the new project.
+
+This project structure is based on the bare-bones project template.  See the https://shannah.github.io/cn1-maven-archetypes/cn1app-archetype-tutorial/getting-started.html#running[Getting Started tutorial] for instructions on working with this new structure.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

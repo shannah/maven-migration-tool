@@ -59,7 +59,7 @@
       <recent name="$PROJECT_DIR$/common/src/main/resources" />
     </key>
   </component>
-  <component name="RunManager" selected="Maven.Windows Desktop Build">
+  <component name="RunManager" selected="Maven.Mac Desktop Build">
     <configuration name="Android Build" type="MavenRunConfiguration" factoryName="Maven" folderName="Build Server">
       <MavenSettings>
         <option name="myGeneralSettings" />
@@ -785,26 +785,26 @@
       <screen x="0" y="23" width="2560" height="1417" />
     </state>
     <state x="1081" y="569" key="#com.intellij.refactoring.encapsulateFields.EncalpsulateFieldsDialog/2560.23.1680.1027/0.23.2560.1417@0.23.2560.1417" timestamp="1617803204763" />
-    <state width="1857" height="445" key="GridCell.Tab.0.bottom" timestamp="1617897252225">
+    <state width="1857" height="445" key="GridCell.Tab.0.bottom" timestamp="1617904966390">
       <screen x="0" y="23" width="2560" height="1417" />
     </state>
     <state width="1400" height="258" key="GridCell.Tab.0.bottom/0.25.1440.817@0.25.1440.817" timestamp="1613592228433" />
-    <state width="1857" height="445" key="GridCell.Tab.0.bottom/2560.23.1680.1027/0.23.2560.1417@0.23.2560.1417" timestamp="1617897252225" />
-    <state width="1857" height="445" key="GridCell.Tab.0.center" timestamp="1617897252223">
+    <state width="1857" height="445" key="GridCell.Tab.0.bottom/2560.23.1680.1027/0.23.2560.1417@0.23.2560.1417" timestamp="1617904966390" />
+    <state width="1857" height="445" key="GridCell.Tab.0.center" timestamp="1617904966389">
       <screen x="0" y="23" width="2560" height="1417" />
     </state>
     <state width="1400" height="258" key="GridCell.Tab.0.center/0.25.1440.817@0.25.1440.817" timestamp="1613592228433" />
-    <state width="1857" height="445" key="GridCell.Tab.0.center/2560.23.1680.1027/0.23.2560.1417@0.23.2560.1417" timestamp="1617897252223" />
-    <state width="1857" height="445" key="GridCell.Tab.0.left" timestamp="1617897252223">
+    <state width="1857" height="445" key="GridCell.Tab.0.center/2560.23.1680.1027/0.23.2560.1417@0.23.2560.1417" timestamp="1617904966389" />
+    <state width="1857" height="445" key="GridCell.Tab.0.left" timestamp="1617904966389">
       <screen x="0" y="23" width="2560" height="1417" />
     </state>
     <state width="1400" height="258" key="GridCell.Tab.0.left/0.25.1440.817@0.25.1440.817" timestamp="1613592228432" />
-    <state width="1857" height="445" key="GridCell.Tab.0.left/2560.23.1680.1027/0.23.2560.1417@0.23.2560.1417" timestamp="1617897252223" />
-    <state width="1857" height="445" key="GridCell.Tab.0.right" timestamp="1617897252224">
+    <state width="1857" height="445" key="GridCell.Tab.0.left/2560.23.1680.1027/0.23.2560.1417@0.23.2560.1417" timestamp="1617904966389" />
+    <state width="1857" height="445" key="GridCell.Tab.0.right" timestamp="1617904966390">
       <screen x="0" y="23" width="2560" height="1417" />
     </state>
     <state width="1400" height="258" key="GridCell.Tab.0.right/0.25.1440.817@0.25.1440.817" timestamp="1613592228433" />
-    <state width="1857" height="445" key="GridCell.Tab.0.right/2560.23.1680.1027/0.23.2560.1417@0.23.2560.1417" timestamp="1617897252224" />
+    <state width="1857" height="445" key="GridCell.Tab.0.right/2560.23.1680.1027/0.23.2560.1417@0.23.2560.1417" timestamp="1617904966390" />
     <state width="1857" height="258" key="GridCell.Tab.1.bottom" timestamp="1613673760461">
       <screen x="0" y="23" width="2560" height="1417" />
     </state>

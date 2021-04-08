@@ -18,6 +18,7 @@
     <maven.compiler.target>1.8</maven.compiler.target>
     <codename1.platform>javase</codename1.platform>
       <codename1.projectPlatform>javase</codename1.projectPlatform>
+      <automated>true</automated>
   </properties>
     <build>
     <testSourceDirectory>${project.basedir}/../common/src/test/java</testSourceDirectory>
@@ -155,6 +156,28 @@
                               </manifest>
                           </archive>
                       </configuration>
+                  </plugin>
+                  <plugin>
+                      <artifactId>maven-antrun-plugin</artifactId>
+                      <version>3.0.0</version>
+                      <executions>
+                          <execution>
+                              <phase>prepare-package</phase>
+                              <configuration>
+                                  <target>
+                                      <zip destfile="${project.build.directory}/${project.build.finalName}.zip"
+                                           basedir="${project.build.directory}"
+                                           includes="${project.build.finalName}.jar, libs/*">
+
+                                      </zip>
+
+                                  </target>
+                              </configuration>
+                              <goals>
+                                  <goal>run</goal>
+                              </goals>
+                          </execution>
+                      </executions>
                   </plugin>
 
               </plugins>
