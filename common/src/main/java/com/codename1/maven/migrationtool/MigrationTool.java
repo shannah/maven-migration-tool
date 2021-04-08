@@ -50,6 +50,7 @@ public class MigrationTool {
     private Resources theme;
 
     private TextArea consoleBuffer;
+    private Label endOfConsoleMarker;
 
     private MavenArtifact codenameOneMavenPluginArtifact;
 
@@ -90,6 +91,7 @@ public class MigrationTool {
         }
 
         Form hi = new Form("Maven Migration Tool", new BorderLayout());
+        hi.getTextSelection().setEnabled(true);
 
         hi.getToolbar().hideToolbar();
 
@@ -274,6 +276,7 @@ public class MigrationTool {
         );
 
         wrapper.setScrollableY(true);
+        endOfConsoleMarker = new Label();
         consoleBuffer = new TextArea();
         consoleBuffer.setMaxSize(9999999);
         consoleBuffer.setEditable(false);
@@ -285,6 +288,7 @@ public class MigrationTool {
         Container consoleWrapper = new Container(BoxLayout.y());
         consoleWrapper.setScrollableY(true);
         consoleWrapper.add(consoleBuffer);
+        consoleWrapper.add(endOfConsoleMarker);
         $(consoleWrapper).selectAllStyles().setBgColor(0xffffff).setBgTransparency(0xff);
         SplitPane splitPane = new SplitPane(SplitPane.VERTICAL_SPLIT, wrapper, consoleWrapper, "10%", "70%", "100%");
 
@@ -402,7 +406,7 @@ public class MigrationTool {
 
     private File showDirectoryChooser(String title, File startDirectory) {
 
-        if (isWindows) {
+        if (!isMac) {
             JFileChooser chooser = new JFileChooser();
             chooser.setDialogTitle(title);
             chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -522,6 +526,7 @@ public class MigrationTool {
                 CN.callSerially(() -> {
                     consoleBuffer.setText(consoleBuffer.getText() + line + "\n");
                     consoleBuffer.getParent().revalidateWithAnimationSafety();
+                    endOfConsoleMarker.scrollRectToVisible(0, 0, 1, 1, endOfConsoleMarker);
 
                 });
             }
