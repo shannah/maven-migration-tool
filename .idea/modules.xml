@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/migrationtool.iml" filepath="$PROJECT_DIR$/.idea/migrationtool.iml" />
+      <module fileurl="file://$PROJECT_DIR$/common/migrationtool-common.iml" filepath="$PROJECT_DIR$/common/migrationtool-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/javase/migrationtool-javase.iml" filepath="$PROJECT_DIR$/javase/migrationtool-javase.iml" />
+    </modules>
+  </component>
+</project>

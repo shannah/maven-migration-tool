@@ -1,0 +1,85 @@
+#Constants {
+    includeNativeBool: true;
+}
+
+@font-face {
+    font-family: "JetBrainsMono";
+    src: url("fonts/JetBrainsMono-Regular.ttf");
+}
+
+ErrorContainer {
+    cn1-derive: Container;
+    border: 1px solid red;
+}
+ErrorTextField {
+    cn1-derive: TextField;
+    border: 1px solid red;
+}
+
+ErrorMessage {
+    cn1-derive: Label;
+    color: red;
+}
+
+ConsoleBuffer {
+    font-family: "JetBrainsMono";
+    font-size: 2.5mm;
+    color: #333333;
+    background-color: white;
+}
+
+FieldLabel {
+    cn1-derive: Label;
+    font-size: 2.5mm;
+}
+
+H2 {
+    font-size: 5mm;
+    cn1-derive:Label;
+    color: black;
+
+}
+
+TextField {
+    font-size: 3.5mm;
+    padding: 2mm;
+}
+
+TextHint {
+    font-size: 3.5mm;
+    padding: 2mm;
+}
+
+Button {
+    border: 1px solid #cccccc;
+    color: #333333;
+    border-radius: 2mm;
+    margin: 1mm;
+    font-size: 3.5mm;
+    padding: 3mm;
+}
+
+Images {
+    background-image: url("images/codenameone-logo.png");
+    cn1-source-dpi: 0;
+}
+
+Button.pressed {
+    background-color: #666666;
+    color: white;
+}
+
+FeaturedButton {
+    cn1-derive: Button;
+    background-color: #007AFF;
+    border: 1px solid transparent;
+    color: white;
+
+}
+
+Title {
+    font-size: 10mm;
+    font-weight: normal;
+    color: #999999;
+    padding: 10mm;
+}
