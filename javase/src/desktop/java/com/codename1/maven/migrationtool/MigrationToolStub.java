@@ -55,9 +55,6 @@ public class MigrationToolStub implements Runnable, WindowListener {
     public static final String BUILD_KEY = "";
     public static final String PACKAGE_NAME = "";
     public static final String BUILT_BY_USER = "";
-    private static final int fontSizeSmall = -1;
-    private static final int fontSizeMedium = -1;
-    private static final int fontSizeLarge = -1;
     private static final boolean isWindows;
     static {
         isWindows = File.separatorChar == '\\';
@@ -101,6 +98,9 @@ public class MigrationToolStub implements Runnable, WindowListener {
 
 
         frm = new JFrame(APP_TITLE);
+        Toolkit tk = Toolkit.getDefaultToolkit();
+        JavaSEPort.setDefaultPixelMilliRatio(tk.getScreenResolution() / 25.4 * JavaSEPort.getRetinaScale());
+
         Display.init(frm.getContentPane());
         Display.getInstance().setProperty("build_key", BUILD_KEY);
         Display.getInstance().setProperty("package_name", PACKAGE_NAME);
@@ -128,15 +128,11 @@ public class MigrationToolStub implements Runnable, WindowListener {
             frm.setResizable(false);
             frm.setUndecorated(true);
             gd.setFullScreenWindow(frm);
-            Toolkit tk = Toolkit.getDefaultToolkit();
-            JavaSEPort.setDefaultPixelMilliRatio(tk.getScreenResolution() / 25.4 * JavaSEPort.getRetinaScale());
         } else {
             frm.setLocationByPlatform(true);
             frm.setResizable(APP_RESIZEABLE);
             int w = APP_WIDTH;
             int h = APP_HEIGHT;
-            Toolkit tk = Toolkit.getDefaultToolkit();
-            JavaSEPort.setDefaultPixelMilliRatio(tk.getScreenResolution() / 25.4 * JavaSEPort.getRetinaScale());
 
             frm.getContentPane().setPreferredSize(new java.awt.Dimension(w, h));
             frm.getContentPane().setMinimumSize(new java.awt.Dimension(w, h));
