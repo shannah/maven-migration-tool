@@ -35,6 +35,7 @@ import java.util.Arrays;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
+import java.util.prefs.Preferences;
 
 /**
  * A wrapper class around a Codename One app, allows building desktop Java
@@ -127,41 +128,16 @@ public class MigrationToolStub implements Runnable, WindowListener {
             frm.setResizable(false);
             frm.setUndecorated(true);
             gd.setFullScreenWindow(frm);
-            if(APP_ADAPT_TO_RETINA &&
-                    Math.max(Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height) > 2000) {
-                JavaSEPort.setDefaultPixelMilliRatio(new Double(20));
-                if(fontSizeSmall > -1) {
-                    JavaSEPort.setFontSize(fontSizeSmall * 2, fontSizeMedium * 2, fontSizeLarge * 2);
-                } else {
-                    JavaSEPort.setFontSize(22, 30, 38);
-                }
-            } else {
-                JavaSEPort.setDefaultPixelMilliRatio(new Double(10));
-                if(fontSizeSmall > -1) {
-                    JavaSEPort.setFontSize(fontSizeSmall, fontSizeMedium, fontSizeLarge);
-                }
-            }
+            Toolkit tk = Toolkit.getDefaultToolkit();
+            JavaSEPort.setDefaultPixelMilliRatio(tk.getScreenResolution() / 25.4 * JavaSEPort.getRetinaScale());
         } else {
             frm.setLocationByPlatform(true);
             frm.setResizable(APP_RESIZEABLE);
             int w = APP_WIDTH;
             int h = APP_HEIGHT;
-            if(APP_ADAPT_TO_RETINA &&
-                    Math.max(Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height) > 2000) {
-                w *= 2;
-                h *= 2;
-                JavaSEPort.setDefaultPixelMilliRatio(new Double(20));
-                if(fontSizeSmall > -1) {
-                    JavaSEPort.setFontSize(fontSizeSmall * 2, fontSizeMedium * 2, fontSizeLarge * 2);
-                } else {
-                    JavaSEPort.setFontSize(22, 30, 38);
-                }
-            } else {
-                JavaSEPort.setDefaultPixelMilliRatio(new Double(10));
-                if(fontSizeSmall > -1) {
-                    JavaSEPort.setFontSize(fontSizeSmall, fontSizeMedium, fontSizeLarge);
-                }
-            }
+            Toolkit tk = Toolkit.getDefaultToolkit();
+            JavaSEPort.setDefaultPixelMilliRatio(tk.getScreenResolution() / 25.4 * JavaSEPort.getRetinaScale());
+
             frm.getContentPane().setPreferredSize(new java.awt.Dimension(w, h));
             frm.getContentPane().setMinimumSize(new java.awt.Dimension(w, h));
             frm.getContentPane().setMaximumSize(new java.awt.Dimension(w, h));

@@ -1,6 +1,10 @@
 #Constants {
     includeNativeBool: true;
+    --small-text: 1.5mm;
+    --med-text: 2.5mm;
+    --large-text: 5mm;
 }
+
 
 @font-face {
     font-family: "JetBrainsMono";
@@ -23,30 +27,30 @@ ErrorMessage {
 
 ConsoleBuffer {
     font-family: "JetBrainsMono";
-    font-size: 2.5mm;
+    font-size: var(--med-text);
     color: #333333;
     background-color: white;
 }
 
 FieldLabel {
     cn1-derive: Label;
-    font-size: 2.5mm;
+    font-size: var(--small-text);
 }
 
 H2 {
-    font-size: 5mm;
+    font-size: var(--large-text);
     cn1-derive:Label;
     color: black;
 
 }
 
 TextField {
-    font-size: 3.5mm;
+    font-size: var(--med-text);
     padding: 2mm;
 }
 
 TextHint {
-    font-size: 3.5mm;
+    font-size: var(--med-text);
     padding: 2mm;
 }
 
@@ -55,13 +59,13 @@ Button {
     color: #333333;
     border-radius: 2mm;
     margin: 1mm;
-    font-size: 3.5mm;
+    font-size: var(--med-text);
     padding: 3mm;
 }
 
 Images {
     background-image: url("images/codenameone-logo.png");
-    cn1-source-dpi: 0;
+    cn1-source-dpi: 160;
 }
 
 Button.pressed {
@@ -78,7 +82,7 @@ FeaturedButton {
 }
 
 Title {
-    font-size: 10mm;
+    font-size: var(--large-text);
     font-weight: normal;
     color: #999999;
     padding: 10mm;
