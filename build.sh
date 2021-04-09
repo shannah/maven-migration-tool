@@ -58,8 +58,6 @@ function jar {
 
 function all_bundles {
     "jar"
-    "mac_desktop"
-    "windows_desktop"
 }
 
 function help {

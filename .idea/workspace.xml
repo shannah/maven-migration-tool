@@ -3,8 +3,36 @@
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="336d32c5-6f4b-4a8f-b637-9fea310958e7" name="Default Changelist" comment="" />
+    <list default="true" id="336d32c5-6f4b-4a8f-b637-9fea310958e7" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/android/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.sh" beforeDir="false" afterPath="$PROJECT_DIR$/build.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/common/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ios/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/javascript/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/javascript/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/javase/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/javase/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/win/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/win/pom.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -16,6 +44,9 @@
         <option value="Class" />
       </list>
     </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MavenImportPreferences">
     <option name="generalSettings">
@@ -766,6 +797,17 @@
     </task>
     <servers />
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="WindowStateProjectService">
     <state x="604" y="148" width="801" height="672" key="#Project_Structure" timestamp="1613667632061">
       <screen x="0" y="23" width="2560" height="1417" />
@@ -785,26 +827,26 @@
       <screen x="0" y="23" width="2560" height="1417" />
     </state>
     <state x="1081" y="569" key="#com.intellij.refactoring.encapsulateFields.EncalpsulateFieldsDialog/2560.23.1680.1027/0.23.2560.1417@0.23.2560.1417" timestamp="1617803204763" />
-    <state width="1857" height="445" key="GridCell.Tab.0.bottom" timestamp="1617972821998">
+    <state width="1857" height="445" key="GridCell.Tab.0.bottom" timestamp="1617982053728">
       <screen x="0" y="23" width="2560" height="1417" />
     </state>
     <state width="1400" height="258" key="GridCell.Tab.0.bottom/0.25.1440.817@0.25.1440.817" timestamp="1613592228433" />
-    <state width="1857" height="445" key="GridCell.Tab.0.bottom/2560.23.1680.1027/0.23.2560.1417@0.23.2560.1417" timestamp="1617972821998" />
-    <state width="1857" height="445" key="GridCell.Tab.0.center" timestamp="1617972821997">
+    <state width="1857" height="445" key="GridCell.Tab.0.bottom/2560.23.1680.1027/0.23.2560.1417@0.23.2560.1417" timestamp="1617982053728" />
+    <state width="1857" height="445" key="GridCell.Tab.0.center" timestamp="1617982053727">
       <screen x="0" y="23" width="2560" height="1417" />
     </state>
     <state width="1400" height="258" key="GridCell.Tab.0.center/0.25.1440.817@0.25.1440.817" timestamp="1613592228433" />
-    <state width="1857" height="445" key="GridCell.Tab.0.center/2560.23.1680.1027/0.23.2560.1417@0.23.2560.1417" timestamp="1617972821997" />
-    <state width="1857" height="445" key="GridCell.Tab.0.left" timestamp="1617972821996">
+    <state width="1857" height="445" key="GridCell.Tab.0.center/2560.23.1680.1027/0.23.2560.1417@0.23.2560.1417" timestamp="1617982053727" />
+    <state width="1857" height="445" key="GridCell.Tab.0.left" timestamp="1617982053726">
       <screen x="0" y="23" width="2560" height="1417" />
     </state>
     <state width="1400" height="258" key="GridCell.Tab.0.left/0.25.1440.817@0.25.1440.817" timestamp="1613592228432" />
-    <state width="1857" height="445" key="GridCell.Tab.0.left/2560.23.1680.1027/0.23.2560.1417@0.23.2560.1417" timestamp="1617972821996" />
-    <state width="1857" height="445" key="GridCell.Tab.0.right" timestamp="1617972821997">
+    <state width="1857" height="445" key="GridCell.Tab.0.left/2560.23.1680.1027/0.23.2560.1417@0.23.2560.1417" timestamp="1617982053726" />
+    <state width="1857" height="445" key="GridCell.Tab.0.right" timestamp="1617982053727">
       <screen x="0" y="23" width="2560" height="1417" />
     </state>
     <state width="1400" height="258" key="GridCell.Tab.0.right/0.25.1440.817@0.25.1440.817" timestamp="1613592228433" />
-    <state width="1857" height="445" key="GridCell.Tab.0.right/2560.23.1680.1027/0.23.2560.1417@0.23.2560.1417" timestamp="1617972821997" />
+    <state width="1857" height="445" key="GridCell.Tab.0.right/2560.23.1680.1027/0.23.2560.1417@0.23.2560.1417" timestamp="1617982053727" />
     <state width="1857" height="258" key="GridCell.Tab.1.bottom" timestamp="1613673760461">
       <screen x="0" y="23" width="2560" height="1417" />
     </state>
@@ -842,9 +884,9 @@
       <screen x="0" y="25" width="1440" height="817" />
     </state>
     <state x="368" y="195" width="670" height="675" key="run.anything.popup/0.25.1440.817@0.25.1440.817" timestamp="1613589686494" />
-    <state x="921" y="365" width="670" height="676" key="search.everywhere.popup" timestamp="1617885843497">
+    <state x="921" y="365" width="670" height="676" key="search.everywhere.popup" timestamp="1617981232293">
       <screen x="0" y="23" width="2560" height="1417" />
     </state>
-    <state x="921" y="365" width="670" height="676" key="search.everywhere.popup/2560.23.1680.1027/0.23.2560.1417@0.23.2560.1417" timestamp="1617885843497" />
+    <state x="921" y="365" width="670" height="676" key="search.everywhere.popup/2560.23.1680.1027/0.23.2560.1417@0.23.2560.1417" timestamp="1617981232293" />
   </component>
 </project>
