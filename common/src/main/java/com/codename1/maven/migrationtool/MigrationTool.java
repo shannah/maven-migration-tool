@@ -20,6 +20,7 @@ import com.codename1.ui.TextField;
 import com.codename1.ui.layouts.*;
 import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
+import com.codename1.ui.layouts.FlowLayout;
 import com.codename1.ui.plaf.*;
 import com.codename1.ui.plaf.UIManager;
 import com.codename1.ui.util.Resources;
@@ -176,6 +177,9 @@ public class MigrationTool {
             });
         });
 
+        CheckBox verboseMode = new CheckBox("Verbose Output");
+
+
         Button createProject = new Button("Create Project", "FeaturedButton");
         createProject.addActionListener(evt->{
             CN.callSerially(()->{
@@ -218,7 +222,7 @@ public class MigrationTool {
 
                         CN.invokeAndBlock(()->{
                             try {
-                                File resultingProject = migrateLibraryProject(sourceProjectFile, groupIdStr, artifactIdStr, destProjectFile);
+                                File resultingProject = migrateLibraryProject(sourceProjectFile, groupIdStr, artifactIdStr, destProjectFile, verboseMode.isSelected());
                                 CN.callSerially(()->{
 
                                     Dialog.show("Success", "Your maven project have been created at "+resultingProject.getAbsolutePath(), "OK", null);
@@ -235,7 +239,7 @@ public class MigrationTool {
                     } else if (isAppProject(sourceProjectFile)) {
                         CN.invokeAndBlock(()->{
                             try {
-                                File resultingProject = migrateAppProject(sourceProjectFile, destProjectFile);
+                                File resultingProject = migrateAppProject(sourceProjectFile, destProjectFile, verboseMode.isSelected());
 
                                 CN.callSerially(()->{
 
@@ -271,6 +275,7 @@ public class MigrationTool {
                 new Label("Destination Directory", "FieldLabel"),
                 BorderLayout.centerEastWest(destinationProjectPath, selectOutputDirectory, null),
                 mavenDetailsCnt,
+                FlowLayout.encloseIn(verboseMode),
                 createProject
         );
 
@@ -447,7 +452,7 @@ public class MigrationTool {
         return (usePluginVersion == null || usePluginVersion.isEmpty() || "LATEST".equalsIgnoreCase(usePluginVersion));
     }
 
-    private File migrateAppProject(File sourceProject, File outputDirectory) throws IOException, XmlPullParserException {
+    private File migrateAppProject(File sourceProject, File outputDirectory, boolean verbose) throws IOException, XmlPullParserException {
 
         String version = useLatestPluginVersion() ? getCodenameOneMavenPluginArtifact().findLatestVersionOnMavenCentral() : usePluginVersion;
         File tempDir = MavenWrapper.createTempDirectory("tmpappproject", "");
@@ -486,7 +491,8 @@ public class MigrationTool {
                     "-DinteractiveMode=false",
                     "-DsourceProject=" + sourceProject.getAbsolutePath(),
                     "-Dcn1Version=" + version,
-                    "-U");
+                    "-U",
+                    verbose ? "-X" : "-e");
 
             if (result != 0) {
                 throw new IOException("Maven execution failed.  Check the log output");
@@ -544,7 +550,7 @@ public class MigrationTool {
         return mvnw;
     }
 
-    private File migrateLibraryProject(File sourceProject, String groupId, String artifactId, File outputDirectory) throws IOException, XmlPullParserException {
+    private File migrateLibraryProject(File sourceProject, String groupId, String artifactId, File outputDirectory, boolean verbose) throws IOException, XmlPullParserException {
 
         String version = useLatestPluginVersion() ? getCodenameOneMavenPluginArtifact().findLatestVersionOnMavenCentral() : usePluginVersion;
         File tempDir = MavenWrapper.createTempDirectory("tmpappproject", "");
@@ -557,7 +563,7 @@ public class MigrationTool {
                     "-DartifactId=" + artifactId,
                     "-Dversion=1.0-SNAPSHOT",
                     "-U",
-                    "-e",
+                    verbose ? "-X" : "-e",
                     "-DinteractiveMode=false");
 
             if (result != 0) {
