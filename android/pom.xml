@@ -4,11 +4,11 @@
   <parent>
       <groupId>com.codename1.maven.migrationtool</groupId>
       <artifactId>migrationtool</artifactId>
-      <version>1.0.2-SNAPSHOT</version>
+      <version>1.0.2</version>
   </parent>
   <groupId>com.codename1.maven.migrationtool</groupId>
   <artifactId>migrationtool-android</artifactId>
-  <version>1.0.2-SNAPSHOT</version>
+  <version>1.0.2</version>
 
   <name>migrationtool-android</name>
   
