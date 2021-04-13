@@ -23,15 +23,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="336d32c5-6f4b-4a8f-b637-9fea310958e7" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_codenameone_codenameone_core_7_0_21_SNAPSHOT.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_codenameone_codenameone_core_7_0_22_SNAPSHOT.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_codenameone_codenameone_javase_7_0_21_SNAPSHOT.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_codenameone_codenameone_javase_7_0_22_SNAPSHOT.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/android/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.sh" beforeDir="false" afterPath="$PROJECT_DIR$/build.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/common/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ios/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/javascript/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/javascript/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/javase/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/javase/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/win/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/win/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/migrationtool-common.iml" beforeDir="false" afterPath="$PROJECT_DIR$/common/migrationtool-common.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/src/main/java/com/codename1/maven/migrationtool/MigrationTool.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/com/codename1/maven/migrationtool/MigrationTool.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/javase/migrationtool-javase.iml" beforeDir="false" afterPath="$PROJECT_DIR$/javase/migrationtool-javase.iml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -77,6 +74,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/common/src/main/css/images" />
     <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.0" />
@@ -91,6 +89,10 @@
     </key>
   </component>
   <component name="RunManager" selected="Maven.Run in Simulator">
+    <configuration name="migrationtool-javase-1.0.1.jar" type="JarApplication" temporary="true">
+      <option name="JAR_PATH" value="$PROJECT_DIR$/javase/target/migrationtool-javase-1.0.1.jar" />
+      <method v="2" />
+    </configuration>
     <configuration name="Android Build" type="MavenRunConfiguration" factoryName="Maven" folderName="Build Server">
       <MavenSettings>
         <option name="myGeneralSettings" />
@@ -781,7 +783,13 @@
       <item itemvalue="Maven.Update Codename One" />
       <item itemvalue="Maven.Run in Simulator" />
       <item itemvalue="Maven.Run as Desktop App" />
+      <item itemvalue="JAR Application.migrationtool-javase-1.0.1.jar" />
     </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JAR Application.migrationtool-javase-1.0.1.jar" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
@@ -807,6 +815,7 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
     <state x="604" y="148" width="801" height="672" key="#Project_Structure" timestamp="1613667632061">

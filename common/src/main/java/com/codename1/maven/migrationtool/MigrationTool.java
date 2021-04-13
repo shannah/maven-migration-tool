@@ -91,7 +91,6 @@ public class MigrationTool {
         }
 
         Form hi = new Form("Maven Migration Tool", new BorderLayout());
-        hi.getTextSelection().setEnabled(true);
 
         hi.getToolbar().hideToolbar();
 
@@ -280,7 +279,6 @@ public class MigrationTool {
         consoleBuffer = new TextArea();
         consoleBuffer.setMaxSize(9999999);
         consoleBuffer.setEditable(false);
-        consoleBuffer.setTextSelectionEnabled(true);
         consoleBuffer.setUIID("ConsoleBuffer");
         consoleBuffer.setGrowByContent(true);
 
@@ -290,7 +288,14 @@ public class MigrationTool {
         consoleWrapper.add(consoleBuffer);
         consoleWrapper.add(endOfConsoleMarker);
         $(consoleWrapper).selectAllStyles().setBgColor(0xffffff).setBgTransparency(0xff);
-        SplitPane splitPane = new SplitPane(SplitPane.VERTICAL_SPLIT, wrapper, consoleWrapper, "10%", "70%", "100%");
+
+        Button copyConsoleToClipboard = new Button(FontImage.MATERIAL_CONTENT_COPY);
+        copyConsoleToClipboard.addActionListener(evt->{
+            Display.getInstance().copyToClipboard(consoleBuffer.getText());
+            ToastBar.showInfoMessage("Console contents copied to clipboard");
+        });
+
+        SplitPane splitPane = new SplitPane(SplitPane.VERTICAL_SPLIT, wrapper, BorderLayout.center(consoleWrapper).add(BorderLayout.SOUTH, copyConsoleToClipboard), "10%", "70%", "100%");
 
         hi.add(BorderLayout.CENTER, splitPane);
 

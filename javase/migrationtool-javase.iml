@@ -19,8 +19,8 @@
     <orderEntry type="library" name="Maven: org.apache.maven:maven-repository-metadata:3.3.9" level="project" />
     <orderEntry type="library" name="Maven: org.codehaus.plexus:plexus-utils:3.0.22" level="project" />
     <orderEntry type="module" module-name="migrationtool-common" scope="TEST" production-on-test="" />
-    <orderEntry type="library" name="Maven: com.codenameone:codenameone-core:7.0.21-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: com.codenameone:codenameone-javase:7.0.21-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: com.codenameone:codenameone-core:7.0.22-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: com.codenameone:codenameone-javase:7.0.22-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: org.xerial:sqlite-jdbc:3.7.15-M1" level="project" />
     <orderEntry type="library" name="Maven: com.jhlabs:filters:2.0.235-1" level="project" />
   </component>
