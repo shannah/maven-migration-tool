@@ -11,11 +11,11 @@ function desktop {
 }
 function settings {
   
-  "$MVNW" "cn:settings" "-e"
+  "$MVNW" "cn1:settings" "-e"
 }
 function update {
   
-  "$MVNW" "cn:update" "-U" "-e"
+  "$MVNW" "cn1:update" "-U" "-e"
 }
 function help {
   "echo" "-e" "run.sh [COMMAND]"
