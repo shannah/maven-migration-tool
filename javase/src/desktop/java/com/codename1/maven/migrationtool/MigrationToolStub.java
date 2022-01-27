@@ -35,6 +35,9 @@ import java.util.Arrays;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 import java.util.prefs.Preferences;
 
 /**
@@ -64,6 +67,8 @@ public class MigrationToolStub implements Runnable, WindowListener {
 
     private static JFrame frm;
     private MigrationTool mainApp;
+
+
 
     /**
      * @param args the command line arguments
@@ -98,6 +103,7 @@ public class MigrationToolStub implements Runnable, WindowListener {
 
 
         frm = new JFrame(APP_TITLE);
+
         Toolkit tk = Toolkit.getDefaultToolkit();
         JavaSEPort.setDefaultPixelMilliRatio(tk.getScreenResolution() / 25.4 * JavaSEPort.getRetinaScale());
 
@@ -117,12 +123,12 @@ public class MigrationToolStub implements Runnable, WindowListener {
     public void run() {
         frm.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         frm.addWindowListener(this);
-        ImageIcon ic16 = new ImageIcon(getClass().getResource("/applicationIconImage_16x16.png"));
-        ImageIcon ic20 = new ImageIcon(getClass().getResource("/applicationIconImage_16x16.png"));
-        ImageIcon ic32 = new ImageIcon(getClass().getResource("/applicationIconImage_16x16.png"));
-        ImageIcon ic40 = new ImageIcon(getClass().getResource("/applicationIconImage_16x16.png"));
-        ImageIcon ic64 = new ImageIcon(getClass().getResource("/applicationIconImage_16x16.png"));
-        frm.setIconImages(Arrays.asList(ic16.getImage(), ic20.getImage(), ic32.getImage(), ic40.getImage(), ic64.getImage()));
+        //ImageIcon ic16 = new ImageIcon(getClass().getResource("/applicationIconImage_16x16.png"));
+        //ImageIcon ic20 = new ImageIcon(getClass().getResource("/applicationIconImage_16x16.png"));
+        //ImageIcon ic32 = new ImageIcon(getClass().getResource("/applicationIconImage_16x16.png"));
+        //ImageIcon ic40 = new ImageIcon(getClass().getResource("/applicationIconImage_16x16.png"));
+        //ImageIcon ic64 = new ImageIcon(getClass().getResource("/applicationIconImage_16x16.png"));
+        //frm.setIconImages(Arrays.asList(ic16.getImage(), ic20.getImage(), ic32.getImage(), ic40.getImage(), ic64.getImage()));
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         if(APP_FULLSCREEN && gd.isFullScreenSupported()) {
             frm.setResizable(false);
@@ -163,7 +169,9 @@ public class MigrationToolStub implements Runnable, WindowListener {
     }
 
     private void frameShow(JFrame frm) {
+
         frm.setVisible(true);
+
     }
 
     @Override

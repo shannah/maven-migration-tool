@@ -1,0 +1,19 @@
+{
+  "bin": {"cn1-maven-migrate": "jdeploy-bundle/jdeploy.js"},
+  "author": "Codename One",
+  "description": "A tool to migrate legacy, Ant-based Codename One projects to Maven",
+  "main": "index.js",
+  "preferGlobal": true,
+  "repository": "https://github.com/shannah/maven-migration-tool",
+  "version": "1.0.11",
+  "jdeploy": {
+    "jar": "target/migrationtool-javase-1.0.4-SNAPSHOT.jar",
+    "jdk" : true,
+    "title" : "CN1 Maven Migration Tool"
+  },
+  "dependencies": {"shelljs": "^0.8.4"},
+  "license": "ISC",
+  "name": "cn1-maven-migration-tool",
+  "files": ["jdeploy-bundle"],
+  "scripts": {"test": "echo \"Error: no test specified\" && exit 1"}
+}
