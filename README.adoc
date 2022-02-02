@@ -12,7 +12,7 @@ MIT
 
 == Downloads
 
-See the https://github.com/shannah/maven-migration-tool/releases[releases page].
+See the https://www.jdeploy.com/~cn1-maven-migration-tool[downloads page].
 
 == Usage
 
