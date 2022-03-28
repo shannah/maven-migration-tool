@@ -9,6 +9,7 @@ public class ProjectMigrationRequest {
     private String artifactId;
     private boolean inProgress;
     private boolean verboseMode;
+    private String usePluginVersion;
 
     private String mainName;
     private String packageName;
@@ -85,7 +86,13 @@ public class ProjectMigrationRequest {
         this.projectType = projectType;
     }
 
+    public String getUsePluginVersion() {
+        return usePluginVersion;
+    }
 
+    public void setUsePluginVersion(String usePluginVersion) {
+        this.usePluginVersion = usePluginVersion;
+    }
 
 
     public static enum ProjectType {

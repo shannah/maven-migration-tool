@@ -24,13 +24,14 @@ public class MigrationToolForm extends Form {
 
     private ProjectMigrationRequest model;
 
-    private String usePluginVersion;
+
     private final Button browseSourceProject, selectOutputDirectory, createProject;
     private final Container mavenDetailsCnt;
     private final TextField sourceProjectPath;
     private final TextField destinationProjectPath;
     private final TextField groupId;
     private final TextField artifactId;
+    private final TextField cn1Version;
     private Resources theme;
     private final Label endOfConsoleMarker;
     private final TextArea consoleBuffer;
@@ -47,11 +48,11 @@ public class MigrationToolForm extends Form {
 
         hi.getToolbar().hideToolbar();
 
-        usePluginVersion = Preferences.get("cn1Version", "LATEST");
-        TextField cn1Version = new TextField(usePluginVersion);
+
+        cn1Version = new TextField();
         cn1Version.addActionListener(evt->{
-            Preferences.set("cn1Version", cn1Version.getText());
-            usePluginVersion = cn1Version.getText();
+            model.setUsePluginVersion(cn1Version.getText());
+            Preferences.set("cn1Version", model.getUsePluginVersion());
         });
 
         SpanLabel welcome = new SpanLabel("This tool can help you to migrate your existing Codename One projects over to the new Maven project structure.");
@@ -60,15 +61,15 @@ public class MigrationToolForm extends Form {
         sourceProjectPath.setHint("/path/to/existing/project");
         sourceProjectPath.addActionListener(e->model.setSourceProjectPath(sourceProjectPath.getText()));
 
-        destinationProjectPath = new TextField(Preferences.get("destinationProjectPath", ""));
+        destinationProjectPath = new TextField();
         destinationProjectPath.addActionListener(evt->{
+            model.setDestinationProjectPath(destinationProjectPath.getText());
             Preferences.set("destinationProjectPath", destinationProjectPath.getText());
         });
-        destinationProjectPath.addActionListener(e->model.setDestinationProjectPath(destinationProjectPath.getText()));
 
         destinationProjectPath.setHint("/path/to/outputproject");
 
-        groupId = new TextField(Preferences.get("groupId", ""));
+        groupId = new TextField();
         groupId.addActionListener(evt->{
             Preferences.set("groupId", groupId.getText());
             model.setGroupId(groupId.getText());
@@ -188,6 +189,8 @@ public class MigrationToolForm extends Form {
 
         mainName.setText(strval(model.getMainName()));
         packageName.setText(strval(model.getPackageName()));
+        cn1Version.setText(strval(model.getUsePluginVersion()));
+
 
         boolean animateLayout = false;
 

@@ -6,6 +6,7 @@ import static com.codename1.ui.ComponentSelector.$;
 
 import com.codename1.io.Log;
 import com.codename1.io.Preferences;
+import com.codename1.io.Util;
 import com.codename1.maven.migrationtool.models.ProjectMigrationRequest;
 import com.codename1.maven.migrationtool.util.MavenArtifact;
 import com.codename1.maven.migrationtool.util.MavenWrapper;
@@ -54,7 +55,6 @@ public class MigrationTool {
         return codenameOneMavenPluginArtifact;
     }
 
-    private String usePluginVersion;
 
     public void init(Object context) {
         // use two network threads instead of one
@@ -73,7 +73,10 @@ public class MigrationTool {
             }
             Log.sendLogAsync();
             Dialog.show("Connection Error", "There was a networking error in the connection to " + err.getConnectionRequest().getUrl(), "OK", null);
-        });        
+        });
+        model.setUsePluginVersion(Preferences.get("cn1Version", "LATEST"));
+        model.setDestinationProjectPath(Preferences.get("destinationProjectPath", ""));
+        model.setGroupId(Preferences.get("groupId", ""));
     }
 
     private void handleSelectSourceProject(ActionEvent e) {
@@ -230,6 +233,7 @@ public class MigrationTool {
                 .onCreateProject(e->handleCreateProject(e));
 
         view.show();
+        view.updateUI();
     }
     
     public void stop() {
@@ -259,7 +263,12 @@ public class MigrationTool {
 
 
     private boolean isAppProject(File project) {
-        return project.exists() && new File(project, "codenameone_settings.properties").exists();
+        if (project.exists() && new File(project, "codenameone_settings.properties").exists()) {
+            return true;
+        } else if (project.exists() && new File(project, "common" + File.separator + "codenameone_settings.properties").exists()) {
+            return true;
+        }
+        return false;
     }
 
     private boolean isLibraryProject(File project) {
@@ -302,11 +311,16 @@ public class MigrationTool {
     }
 
     private boolean useLatestPluginVersion() {
+        String usePluginVersion = model.getUsePluginVersion();
         return (usePluginVersion == null || usePluginVersion.isEmpty() || "LATEST".equalsIgnoreCase(usePluginVersion));
     }
 
     private void loadCodenameOneSettings() throws IOException {
         File cn1Settings = new File(model.getSourceProjectPath(), "codenameone_settings.properties");
+        if (!cn1Settings.exists()) {
+            cn1Settings = new File(model.getSourceProjectPath(), "common" + File.separator + "codenameone_settings.properties");
+        }
+
         Properties cn1SettingsProperties = new Properties();
         try (InputStream input = new FileInputStream(cn1Settings)) {
             cn1SettingsProperties.load(input);
@@ -325,13 +339,54 @@ public class MigrationTool {
         }
     }
 
+    /**
+     * Installs a new generate-app-project.rpf file and returns the old one if there is one.
+     * @return
+     * @throws IOException
+     */
+    private File installTemplateRpfInSourceProject() throws IOException {
+        String templateType = "ant";
+        File cn1Settings = new File(model.getSourceProjectPath(), "codenameone_settings.properties");
+        if (!cn1Settings.exists()) {
+            cn1Settings = new File(model.getSourceProjectPath(), "common" + File.separator + "codenameone_settings.properties");
+            templateType = "maven";
+        }
+
+        Properties cn1SettingsProperties = new Properties();
+        try (InputStream input = new FileInputStream(cn1Settings)) {
+            cn1SettingsProperties.load(input);
+        }
+
+        String packageName = cn1SettingsProperties.getProperty("codename1.packageName");
+        String mainName = cn1SettingsProperties.getProperty("codename1.mainName");
+
+
+        String contents = new StringBuilder()
+                .append("template.type=").append(templateType).append("\n")
+                .append("template.mainName=").append(mainName).append("\n")
+                .append("template.packageName=").append(packageName).append("\n")
+                .toString();
+
+        File rpfFile = new File(model.getSourceProjectPath(), "generate-app-project.rpf");
+        File tmpFile = null;
+        if (rpfFile.exists()) {
+            File.createTempFile(rpfFile.getName(), ".rpf");
+            FileUtils.copyFile(rpfFile, tmpFile);
+        }
+        try (FileOutputStream fos = new FileOutputStream(new File(model.getSourceProjectPath(), "generate-app-project.rpf"))) {
+            fos.write(contents.getBytes("UTF-8"));
+        }
+        return tmpFile;
+
+    }
+
     private File migrateAppProject(File sourceProject, File outputDirectory, boolean verbose) throws IOException, XmlPullParserException {
 
-        String version = useLatestPluginVersion() ? getCodenameOneMavenPluginArtifact().findLatestVersionOnMavenCentral() : usePluginVersion;
+        String version = useLatestPluginVersion() ? getCodenameOneMavenPluginArtifact().findLatestVersionOnMavenCentral() : model.getUsePluginVersion();
         File tempDir = MavenWrapper.createTempDirectory("tmpappproject", "");
-
+        File oldRpfFile = null;
         try {
-
+            oldRpfFile = installTemplateRpfInSourceProject();
             String packageName = model.getPackageName();
             String mainName = model.getMainName();
             if (packageName == null) {
@@ -355,9 +410,11 @@ public class MigrationTool {
                     "-DgroupId=" + groupId,
                     "-Dversion=1.0-SNAPSHOT",
                     "-DmainName=" + mainName,
+                    "-DpackageName=" + packageName,
                     "-DinteractiveMode=false",
                     "-DsourceProject=" + sourceProject.getAbsolutePath(),
                     "-Dcn1Version=" + version,
+                    "-Dcn1PluginVersion=7.0.62",
                     "-U",
                     verbose ? "-X" : "-e");
 
@@ -379,6 +436,15 @@ public class MigrationTool {
 
 
         } finally {
+            try {
+                if (oldRpfFile != null) {
+                    FileUtils.copyFile(oldRpfFile, new File(model.getSourceProjectPath(), "generate-app-project.rpf"));
+                    oldRpfFile.delete();
+                } else {
+                    File f = new File(model.getSourceProjectPath(), "generate-app-project.rpf");
+                    f.delete();
+                }
+            } catch (Exception ex){}
             try {
                 FileUtils.deleteDirectory(tempDir);
             } catch (Exception ex){}
@@ -416,7 +482,7 @@ public class MigrationTool {
 
     private File migrateLibraryProject(File sourceProject, String groupId, String artifactId, File outputDirectory, boolean verbose) throws IOException, XmlPullParserException {
 
-        String version = useLatestPluginVersion() ? getCodenameOneMavenPluginArtifact().findLatestVersionOnMavenCentral() : usePluginVersion;
+        String version = useLatestPluginVersion() ? getCodenameOneMavenPluginArtifact().findLatestVersionOnMavenCentral() : model.getUsePluginVersion();
         File tempDir = MavenWrapper.createTempDirectory("tmpappproject", "");
 
         try {
