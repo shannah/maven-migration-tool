@@ -1,27 +1,18 @@
 package com.codename1.maven.migrationtool;
 
+import static com.codename1.maven.migrationtool.util.UIUtils.error;
 import static com.codename1.ui.CN.*;
 import static com.codename1.ui.ComponentSelector.$;
 
-import com.codename1.components.SpanLabel;
-import com.codename1.components.SplitPane;
-import com.codename1.components.ToastBar;
 import com.codename1.io.Log;
 import com.codename1.io.Preferences;
+import com.codename1.maven.migrationtool.models.ProjectMigrationRequest;
+import com.codename1.maven.migrationtool.util.MavenArtifact;
+import com.codename1.maven.migrationtool.util.MavenWrapper;
+import com.codename1.maven.migrationtool.views.MigrationToolForm;
 import com.codename1.ui.*;
-import com.codename1.ui.Button;
-import com.codename1.ui.Component;
-import com.codename1.ui.Container;
 import com.codename1.ui.Dialog;
-import com.codename1.ui.Image;
-import com.codename1.ui.Label;
-import com.codename1.ui.TextArea;
-import com.codename1.ui.TextField;
-import com.codename1.ui.layouts.*;
-import com.codename1.ui.layouts.BorderLayout;
-import com.codename1.ui.layouts.BoxLayout;
-import com.codename1.ui.layouts.FlowLayout;
-import com.codename1.ui.plaf.*;
+import com.codename1.ui.events.ActionEvent;
 import com.codename1.ui.plaf.UIManager;
 import com.codename1.ui.util.Resources;
 import org.apache.commons.io.FileUtils;
@@ -38,8 +29,11 @@ import java.util.Properties;
  */
 public class MigrationTool {
 
-    protected static String OS = System.getProperty("os.name").toLowerCase();
-    protected static boolean isWindows = (OS.indexOf("win") >= 0);
+    private ProjectMigrationRequest model = new ProjectMigrationRequest();
+    private MigrationToolForm view;
+
+    public static String OS = System.getProperty("os.name").toLowerCase();
+    public static boolean isWindows = (OS.indexOf("win") >= 0);
 
 
     protected static boolean isMac =  (OS.indexOf("mac") >= 0);
@@ -50,8 +44,6 @@ public class MigrationTool {
     private Form current;
     private Resources theme;
 
-    private TextArea consoleBuffer;
-    private Label endOfConsoleMarker;
 
     private MavenArtifact codenameOneMavenPluginArtifact;
 
@@ -83,7 +75,148 @@ public class MigrationTool {
             Dialog.show("Connection Error", "There was a networking error in the connection to " + err.getConnectionRequest().getUrl(), "OK", null);
         });        
     }
-   
+
+    private void handleSelectSourceProject(ActionEvent e) {
+        EventQueue.invokeLater(()-> {
+            File selected = showDirectoryChooser("Select Source Project", null);
+            if (selected == null) return;
+            CN.callSerially(()->{
+                model.setSourceProjectPath(selected.getAbsolutePath());
+                view.updateUI();
+                view.revalidateWithAnimationSafety();
+            });
+
+            if (selected.exists()) {
+
+                CN.scheduleBackgroundTask(()->{
+                    if (isAppProject(selected)) {
+                        try {
+                            loadCodenameOneSettings();
+                        } catch (IOException ex) {
+                            Log.e(ex);
+                        }
+
+                        CN.callSerially(()->{
+                            model.setProjectType(ProjectMigrationRequest.ProjectType.App);
+
+                            view.updateUI();
+                        });
+                    } else {
+                        CN.callSerially(()->{
+                            model.setProjectType(ProjectMigrationRequest.ProjectType.Library);
+                            view.updateUI();
+
+                        });
+                    }
+                });
+            }
+
+        });
+    }
+
+    private void handleSelectDestinationDirectory(ActionEvent evt) {
+
+        EventQueue.invokeLater(()->{
+            File selected = showDirectoryChooser("Select Output Directory", null);
+            if (selected == null) return;
+            CN.callSerially(()->{
+                model.setDestinationProjectPath(selected.getAbsolutePath());
+                Preferences.set("destinationProjectPath", model.getDestinationProjectPath());
+                view.updateUI();
+                view.revalidateWithAnimationSafety();
+            });
+        });
+
+    }
+
+    private void handleCreateProject(ActionEvent e) {
+
+        CN.callSerially(()->{
+            model.setInProgress(true);
+            view.updateUI();
+            view.revalidateWithAnimationSafety();
+            try {
+                String sourceProject = model.getSourceProjectPath();
+                if (sourceProject == null || sourceProject.isEmpty()) {
+                    error(view.getSourceProjectPath(), "Please specify a project to migrate");
+                    return;
+                }
+                File sourceProjectFile = new File(sourceProject);
+                if (!sourceProjectFile.isDirectory()) {
+                    error(view.getSourceProjectPath(), "Specified directory could not be found");
+                    return;
+                }
+
+
+                String destProject = model.getDestinationProjectPath();
+                if (destProject == null || destProject.isEmpty()) {
+                    error(view.getDestinationProjectPath(), "Please select a destination directory");
+                    return;
+                }
+                File destProjectFile = new File(destProject);
+                if (!destProjectFile.isDirectory()) {
+                    error(view.getDestinationProjectPath(), "Specified directory could not be found");
+                    return;
+                }
+                view.getConsoleBuffer().setText("");
+                if (isLibraryProject(sourceProjectFile)) {
+                    String groupIdStr = model.getGroupId();
+                    String artifactIdStr = model.getArtifactId();
+                    if (groupIdStr == null || groupIdStr.isEmpty()) {
+                        error(view.getGroupId(), "Please enter a group ID for your maven project");
+                        return;
+                    }
+                    if (artifactIdStr== null || artifactIdStr.isEmpty()) {
+                        error(view.getArtifactId(), "Please enter an artifact ID for your maven project");
+                        return;
+                    }
+
+                    CN.invokeAndBlock(()->{
+                        try {
+                            File resultingProject = migrateLibraryProject(sourceProjectFile, groupIdStr, artifactIdStr, destProjectFile, model.isVerboseMode());
+                            CN.callSerially(()->{
+
+                                Dialog.show("Success", "Your maven project have been created at "+resultingProject.getAbsolutePath(), "OK", null);
+                                if (Desktop.isDesktopSupported()) {
+                                    try {
+                                        Desktop.getDesktop().open(resultingProject);
+                                    } catch (Exception ex){}
+                                }
+                            });
+                        } catch (Exception ex) {
+                            Log.e(ex);
+                        }
+                    });
+                } else if (isAppProject(sourceProjectFile)) {
+                    CN.invokeAndBlock(()->{
+                        try {
+                            File resultingProject = migrateAppProject(sourceProjectFile, destProjectFile, model.isVerboseMode());
+
+                            CN.callSerially(()->{
+
+                                Dialog.show("Success", "Your maven project have been created at "+resultingProject.getAbsolutePath(), "OK", null);
+                                if (Desktop.isDesktopSupported()) {
+                                    try {
+                                        Desktop.getDesktop().open(resultingProject);
+                                    } catch (Exception ex){}
+                                }
+                            });
+                        } catch (Exception ex) {
+                            Log.e(ex);
+                        }
+                    });
+                }
+            } finally {
+                model.setInProgress(false);
+                view.updateUI();
+                view.revalidateWithAnimationSafety();
+
+            }
+        });
+
+
+    }
+
 
     public void start() {
         if(current != null){
@@ -91,220 +224,12 @@ public class MigrationTool {
             return;
         }
 
-        Form hi = new Form("Maven Migration Tool", new BorderLayout());
+        view = new MigrationToolForm(model, theme)
+                .onBrowseForSourceProject(e->handleSelectSourceProject(e))
+                .onBrowseForOutputProject(e-> handleSelectDestinationDirectory(e))
+                .onCreateProject(e->handleCreateProject(e));
 
-        hi.getToolbar().hideToolbar();
-
-        usePluginVersion = Preferences.get("cn1Version", "LATEST");
-        TextField cn1Version = new TextField(usePluginVersion);
-        cn1Version.addActionListener(evt->{
-            Preferences.set("cn1Version", cn1Version.getText());
-            usePluginVersion = cn1Version.getText();
-        });
-
-        SpanLabel welcome = new SpanLabel("This tool can help you to migrate your existing Codename One projects over to the new Maven project structure.");
-
-        TextField sourceProjectPath = new TextField();
-        sourceProjectPath.setHint("/path/to/existing/project");
-
-        TextField destinationProjectPath = new TextField(Preferences.get("destinationProjectPath", ""));
-        destinationProjectPath.addActionListener(evt->{
-            Preferences.set("destinationProjectPath", destinationProjectPath.getText());
-        });
-
-        destinationProjectPath.setHint("/path/to/outputproject");
-
-        TextField groupId = new TextField(Preferences.get("groupId", ""));
-        groupId.addActionListener(evt->{
-            Preferences.set("groupId", groupId.getText());
-        });
-        groupId.setHint("com.example.mylib");
-
-        TextField artifactId = new TextField();
-        artifactId.setHint("my-library");
-
-        Container mavenDetailsCnt = BoxLayout.encloseY(
-                new Label("Maven Details", "H2"),
-                new Label("Group ID", "FieldLabel"),
-                groupId,
-                new Label("Artifact ID", "FieldLabel"),
-                artifactId);
-
-        Button browseSourceProject = new Button("Browse...");
-        browseSourceProject.addActionListener(evt->{
-            EventQueue.invokeLater(()-> {
-                File selected = showDirectoryChooser("Select Source Project", null);
-                if (selected == null) return;
-                CN.callSerially(()->{
-                    sourceProjectPath.setText(selected.getAbsolutePath());
-                });
-
-                if (selected.exists()) {
-
-                    CN.scheduleBackgroundTask(()->{
-                        if (isAppProject(selected)) {
-                            CN.callSerially(()->{
-                                if (!mavenDetailsCnt.isHidden()) {
-                                    mavenDetailsCnt.setHidden(true);
-                                    mavenDetailsCnt.getParent().animateLayout(500);
-                                }
-                            });
-                        } else {
-                            CN.callSerially(()->{
-                                if (mavenDetailsCnt.isHidden()) {
-                                    mavenDetailsCnt.setHidden(false);
-                                    mavenDetailsCnt.getParent().animateLayout(500);
-                                }
-                            });
-                        }
-                    });
-                }
-
-            });
-
-
-        });
-
-        Button selectOutputDirectory = new Button("Browse...");
-        selectOutputDirectory.addActionListener(evt-> {
-            EventQueue.invokeLater(()->{
-                File selected = showDirectoryChooser("Select Output Directory", null);
-                if (selected == null) return;
-                CN.callSerially(()->{
-                    destinationProjectPath.setText(selected.getAbsolutePath());
-                    Preferences.set("destinationProjectPath", destinationProjectPath.getText());
-                });
-            });
-        });
-
-        CheckBox verboseMode = new CheckBox("Verbose Output");
-
-
-        Button createProject = new Button("Create Project", "FeaturedButton");
-        createProject.addActionListener(evt->{
-            CN.callSerially(()->{
-                createProject.setEnabled(false);
-                try {
-                    String sourceProject = sourceProjectPath.getText();
-                    if (sourceProject == null || sourceProject.isEmpty()) {
-                        error(sourceProjectPath, "Please specify a project to migrate");
-                        return;
-                    }
-                    File sourceProjectFile = new File(sourceProject);
-                    if (!sourceProjectFile.isDirectory()) {
-                        error(sourceProjectPath, "Specified directory could not be found");
-                        return;
-                    }
-
-
-                    String destProject = destinationProjectPath.getText();
-                    if (destProject == null || destProject.isEmpty()) {
-                        error(destinationProjectPath, "Please select a destination directory");
-                        return;
-                    }
-                    File destProjectFile = new File(destProject);
-                    if (!destProjectFile.isDirectory()) {
-                        error(destinationProjectPath, "Specified directory could not be found");
-                        return;
-                    }
-                    consoleBuffer.setText("");
-                    if (isLibraryProject(sourceProjectFile)) {
-                        String groupIdStr = groupId.getText();
-                        String artifactIdStr = artifactId.getText();
-                        if (groupIdStr == null || groupIdStr.isEmpty()) {
-                            error(groupId, "Please enter a group ID for your maven project");
-                            return;
-                        }
-                        if (artifactIdStr== null || artifactIdStr.isEmpty()) {
-                            error(artifactId, "Please enter an artifact ID for your maven project");
-                            return;
-                        }
-
-                        CN.invokeAndBlock(()->{
-                            try {
-                                File resultingProject = migrateLibraryProject(sourceProjectFile, groupIdStr, artifactIdStr, destProjectFile, verboseMode.isSelected());
-                                CN.callSerially(()->{
-
-                                    Dialog.show("Success", "Your maven project have been created at "+resultingProject.getAbsolutePath(), "OK", null);
-                                    if (Desktop.isDesktopSupported()) {
-                                        try {
-                                            Desktop.getDesktop().open(resultingProject);
-                                        } catch (Exception ex){}
-                                    }
-                                });
-                            } catch (Exception ex) {
-                                Log.e(ex);
-                            }
-                        });
-                    } else if (isAppProject(sourceProjectFile)) {
-                        CN.invokeAndBlock(()->{
-                            try {
-                                File resultingProject = migrateAppProject(sourceProjectFile, destProjectFile, verboseMode.isSelected());
-
-                                CN.callSerially(()->{
-
-                                    Dialog.show("Success", "Your maven project have been created at "+resultingProject.getAbsolutePath(), "OK", null);
-                                    if (Desktop.isDesktopSupported()) {
-                                        try {
-                                            Desktop.getDesktop().open(resultingProject);
-                                        } catch (Exception ex){}
-                                    }
-                                });
-                            } catch (Exception ex) {
-                                Log.e(ex);
-                            }
-                        });
-                    }
-                } finally {
-                    createProject.setEnabled(true);
-
-                }
-            });
-
-        });
-        Image cn1Logo = theme.getImage("codenameone-logo.png");
-
-        Container wrapper = BoxLayout.encloseY(
-
-                BorderLayout.centerAbsoluteEastWest(new Label("Maven Migration Tool", "Title"), null, new Label(cn1Logo)),
-                welcome,
-                new Label("Select Codename One Plugin Version (leave blank for LATEST)", "FieldLabel"),
-                cn1Version,
-                new Label("Source Project Path", "FieldLabel"),
-                BorderLayout.centerEastWest(sourceProjectPath, browseSourceProject, null),
-                new Label("Destination Directory", "FieldLabel"),
-                BorderLayout.centerEastWest(destinationProjectPath, selectOutputDirectory, null),
-                mavenDetailsCnt,
-                FlowLayout.encloseIn(verboseMode),
-                createProject
-        );
-
-        wrapper.setScrollableY(true);
-        endOfConsoleMarker = new Label();
-        consoleBuffer = new TextArea();
-        consoleBuffer.setMaxSize(9999999);
-        consoleBuffer.setEditable(false);
-        consoleBuffer.setUIID("ConsoleBuffer");
-        consoleBuffer.setGrowByContent(true);
-
-
-        Container consoleWrapper = new Container(BoxLayout.y());
-        consoleWrapper.setScrollableY(true);
-        consoleWrapper.add(consoleBuffer);
-        consoleWrapper.add(endOfConsoleMarker);
-        $(consoleWrapper).selectAllStyles().setBgColor(0xffffff).setBgTransparency(0xff);
-
-        Button copyConsoleToClipboard = new Button(FontImage.MATERIAL_CONTENT_COPY);
-        copyConsoleToClipboard.addActionListener(evt->{
-            Display.getInstance().copyToClipboard(consoleBuffer.getText());
-            ToastBar.showInfoMessage("Console contents copied to clipboard");
-        });
-
-        SplitPane splitPane = new SplitPane(SplitPane.VERTICAL_SPLIT, wrapper, BorderLayout.center(consoleWrapper).add(BorderLayout.SOUTH, copyConsoleToClipboard), "10%", "70%", "100%");
-
-        hi.add(BorderLayout.CENTER, splitPane);
-
-        hi.show();
+        view.show();
     }
     
     public void stop() {
@@ -315,78 +240,6 @@ public class MigrationTool {
         }
     }
 
-    private void error(Component target, String message) {
-        Log.p(message);
-        Form form = target.getComponentForm();
-        if (form == null) {
-            ToastBar.showErrorMessage(message);
-            return;
-        }
-        Container parent = findBoxlayoutYParent(target);
-        Component row = findBoxlayoutYChild(target);
-        if (parent == null || row == null) {
-            ToastBar.showErrorMessage(message);
-            return;
-        }
-        $("ErrorMessage", form).remove();
-        $("ErrorContainer,ErrorTextField", form).each(c->{
-            clearComponentError(c);
-        });
-        highlightComponentAsError(row);
-
-        Label errorMessage = new Label(message, "ErrorMessage");
-        parent.addComponent(parent.getComponentIndex(row)+1, errorMessage);
-
-        form.animateHierarchy(500);
-    }
-
-    private void highlightComponentAsError(Component cmp) {
-        String uiid = cmp.getUIID();
-        if (uiid != null && uiid.startsWith("Error") ) {
-            return;
-        }
-        cmp.putClientProperty("X-UIID", uiid);
-        if (cmp instanceof Container) {
-            cmp.setUIID("ErrorContainer");
-        } else {
-            cmp.setUIID("ErrorTextField");
-        }
-
-    }
-
-    private void clearComponentError(Component cmp) {
-        String uiid = cmp.getUIID();
-        if ("ErrorContainer".equals(uiid) || "ErrorTextField".equals(uiid)) {
-            String actual = (String)cmp.getClientProperty("X-UIID");
-            if (actual != null) {
-                cmp.setUIID(actual);
-            }
-        }
-    }
-
-    private Container findBoxlayoutYParent(Component cmp) {
-        Container parent = cmp.getParent();
-        if (parent == null) return null;
-        if (parent.getLayout() instanceof BoxLayout) {
-            BoxLayout l = (BoxLayout)parent.getLayout();
-            if (l.getAxis() == BoxLayout.Y_AXIS) {
-                return parent;
-            }
-        }
-        return findBoxlayoutYParent(parent);
-    }
-
-    private Component findBoxlayoutYChild(Component cmp) {
-        Container parent = cmp.getParent();
-        if (parent == null) return null;
-        if (parent.getLayout() instanceof BoxLayout) {
-            BoxLayout l = (BoxLayout)parent.getLayout();
-            if (l.getAxis() == BoxLayout.Y_AXIS) {
-                return cmp;
-            }
-        }
-        return findBoxlayoutYChild(parent);
-    }
 
     public void destroy() {
     }
@@ -452,6 +305,26 @@ public class MigrationTool {
         return (usePluginVersion == null || usePluginVersion.isEmpty() || "LATEST".equalsIgnoreCase(usePluginVersion));
     }
 
+    private void loadCodenameOneSettings() throws IOException {
+        File cn1Settings = new File(model.getSourceProjectPath(), "codenameone_settings.properties");
+        Properties cn1SettingsProperties = new Properties();
+        try (InputStream input = new FileInputStream(cn1Settings)) {
+            cn1SettingsProperties.load(input);
+        }
+
+        String packageName = cn1SettingsProperties.getProperty("codename1.packageName");
+        String mainName = cn1SettingsProperties.getProperty("codename1.mainName");
+        model.setPackageName(packageName);
+        model.setMainName(mainName);
+        if (!CN.isEdt()) {
+            CN.callSerially(()->{
+                view.updateUI();
+            });
+        } else {
+            view.updateUI();
+        }
+    }
+
     private File migrateAppProject(File sourceProject, File outputDirectory, boolean verbose) throws IOException, XmlPullParserException {
 
         String version = useLatestPluginVersion() ? getCodenameOneMavenPluginArtifact().findLatestVersionOnMavenCentral() : usePluginVersion;
@@ -459,14 +332,8 @@ public class MigrationTool {
 
         try {
 
-            File cn1Settings = new File(sourceProject, "codenameone_settings.properties");
-            Properties cn1SettingsProperties = new Properties();
-            try (InputStream input = new FileInputStream(cn1Settings)) {
-                cn1SettingsProperties.load(input);
-            }
-
-            String packageName = cn1SettingsProperties.getProperty("codename1.packageName");
-            String mainName = cn1SettingsProperties.getProperty("codename1.mainName");
+            String packageName = model.getPackageName();
+            String mainName = model.getMainName();
             if (packageName == null) {
                 throw new IOException("Cannot find codename1.packageName property in the codenameone_settings.properties file");
             }
@@ -535,10 +402,7 @@ public class MigrationTool {
                 Log.p(line);
                 buffer.setLength(0);
                 CN.callSerially(() -> {
-                    consoleBuffer.setText(consoleBuffer.getText() + line + "\n");
-                    consoleBuffer.getParent().revalidateWithAnimationSafety();
-                    endOfConsoleMarker.scrollRectToVisible(0, 0, 1, 1, endOfConsoleMarker);
-
+                    view.appendToConsole(line);
                 });
             }
 

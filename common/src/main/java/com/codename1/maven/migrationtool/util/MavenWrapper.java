@@ -1,5 +1,6 @@
-package com.codename1.maven.migrationtool;
+package com.codename1.maven.migrationtool.util;
 
+import com.codename1.maven.migrationtool.MigrationTool;
 import net.lingala.zip4j.ZipFile;
 import org.apache.commons.io.FileUtils;
 

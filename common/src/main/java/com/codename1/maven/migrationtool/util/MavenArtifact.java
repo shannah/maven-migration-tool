@@ -1,4 +1,4 @@
-package com.codename1.maven.migrationtool;
+package com.codename1.maven.migrationtool.util;
 
 import org.apache.maven.artifact.repository.metadata.Metadata;
 import org.apache.maven.artifact.repository.metadata.io.xpp3.MetadataXpp3Reader;
